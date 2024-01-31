@@ -13,6 +13,10 @@
    let _ = assert (not (is_perfect 24)) (* 1 + 2 + 3 + 4 + 6 + 8 + 12 <> 24 *)
 
  *)
+let rec divisorsum n m = 
+  if m >= n then 0 else
+    if (n mod m) = 0 then (m + divisorsum n (m+1))
+    else (0 + divisorsum n (m+1))
 
 let is_perfect (n : int) : bool =
-  assert false (* REMOVE THIS LINE AND FILL IN YOUR SOLUTION *)
+  (divisorsum n 1 = n)

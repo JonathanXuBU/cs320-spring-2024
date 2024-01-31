@@ -22,6 +22,8 @@
    let _ = assert (fast_fib 5 = 8)
 
  *)
+let rec fib_help n pp p =
+  if n < 1 then p else fib_help (n-1) p (pp+p)
 
 let fast_fib (n : int) : int =
-  assert false (* REMOVE THIS LINE AND FILL IN YOUR SOLUTION *)
+  fib_help n 0 1

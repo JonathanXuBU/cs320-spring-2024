@@ -21,5 +21,9 @@
 
  *)
 
+
+let rec reverse_string(s: string) (n: int) = 
+    if (n : int) > String.length s then String.empty else String.sub s (String.length s - n) 1 ^ reverse_string s (n+1)
+
 let string_rev (s : string) : string =
-  assert false (* REMOVE THIS LINE AND FILL IN YOUR SOLUTION *)
+  reverse_string s 1
