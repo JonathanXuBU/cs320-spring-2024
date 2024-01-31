@@ -7,7 +7,7 @@
    Hint: Recall that there are no built-in functions for converting
    from `string` to `char or vice versa. See OCP 2.3.1 for details on
    how to accomplish this.
-
+ls
    Hint: Take a look at the following functions in the OCaml
    documentation:
 
