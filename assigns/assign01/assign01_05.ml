@@ -41,7 +41,7 @@ let check_width len tn min =
   if (len mod tn) >= min || ((len mod tn) = 0 && tn >= min) then true else false
 
 let rec find_width len maxw minw i =
-  if i <= 0 then 0 else
+  if i <= 0 then 1 else
     if check_width len i minw = true then i else
       find_width len maxw minw (i-1)
 
