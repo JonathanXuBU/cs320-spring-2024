@@ -33,23 +33,22 @@
    let _ = assert (block_text "ABCDEFGHIJ" 0 3 = "ABC\nDEF\nGHI\nJ")
    let _ = assert (block_text "ABCDEFGHIJ" 2 3 = "AB\nCD\nEF\nGH\nIJ")
    let _ = assert (block_text "ABCDEFGHIJ" 0 4 = "ABCD\nEFGH\nIJ")
+<<<<<<< HEAD
+=======
+*)
 
- *)
 let check_width len tn min =
   if (len mod tn) >= min || ((len mod tn) = 0 && tn >= min) then true else false
 
-let rec find_width len maxw minw i k =
-  if i <= maxw then
-    if check_width len i minw then find_width len maxw minw (i+1) i else find_width len maxw minw (i+1) k
-  else k
+let rec find_width len maxw minw i =
+  if i <= 0 then 0 else
+    if check_width len i minw = true then i else
+      find_width len maxw minw (i-1)
 
-(*
 let rec block_format s width i =
-  if i + width >= String.length s then String.sub s i (String.length s - i - 1) 
-  else String.sub s i width ^ "/n" ^ block_format s width (i+width)
-*)
+  if i + width >= String.length s then String.sub s i (String.length s - i) 
+  else String.sub s i width ^ "\n" ^ block_format s width (i+width)
 
-let block_text (s : string) (min_width : int) (max_width : int) : int =
-  (*block_format s (find_width (String.length s) min_width max_width 1 0) 0*)
-  find_width (String.length s) max_width min_width 1 0
+let block_text (s : string) (min_width : int) (max_width : int) : string =
+  block_format s (find_width (String.length s) max_width min_width max_width) 0
   
