@@ -54,8 +54,25 @@ type user = {
   recent_posts : post list ;
 }
 
+let rec append lst1 lst2 =
+  match lst1 with
+  | [] -> lst2
+  | h :: t -> h :: append t lst2
+
+let rec npoststale (new_posts : post list) (stale:int) : post list =
+  match new_posts with
+  | [] -> []
+  | h::t-> if h.timestamp < stale then h :: npoststale t stale
+  else npoststale t stale
+
+let rec opoststale (new_posts : post list) (stale:int) : post list =
+  match new_posts with
+  | [] -> []
+  | h::t-> if h.timestamp >= stale then h :: opoststale t stale
+  else opoststale t stale
+
 let update_recent (u : user) (time : int) (stale : int) : user =
-  assert false (* TODO *)
+  assert false
 
 let p t = {title="";content="";timestamp=t}
 let mk op rp = {

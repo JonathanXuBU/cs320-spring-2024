@@ -29,5 +29,24 @@ type recipe = {
   ingrs : ingr list;
 }
 
+let rec append lst1 lst2 =
+  match lst1 with
+  | [] -> lst2
+  | h :: t -> h :: append t lst2
+
+let rec check_recipe (hing : ingr list) (ingr : ingr list) : bool =
+  match hing with
+  | [] -> true
+  | h::t -> if (List.mem h ingr) then
+    true && check_recipe (t) (ingr) else
+    false
+
+
 let recs_by_ingrs (l : recipe list) (s : ingr list) : recipe list =
-  assert false (* TODO *)
+  let rec recipes (lst : recipe list) (ingr :ingr list) =
+    match lst with
+    | [] -> []
+    | h::t -> if check_recipe h.ingrs ingr then
+      append [h] (recipes t ingr) else
+      (recipes t ingr)
+    in recipes l s

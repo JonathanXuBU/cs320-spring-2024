@@ -22,5 +22,37 @@ type int_or_string
   = Int of int
   | String of string
 
+let rec append lst1 lst2 =
+  match lst1 with
+  | [] -> lst2
+  | h :: t -> h :: append t lst2
+
+let int_str_list2 (i1 : int_or_string) (i2 : int_or_string) : int_list_or_string_list list=
+  match i1, i2 with
+  | String n1, String n2 -> [StringList [n1; n2]]
+  | Int n1, Int n2 -> [IntList [n1; n2]]
+  | Int n1, String n2 -> [IntList [n1]; StringList [n2]]
+  | String n2, Int n1 -> [IntList [n1]; StringList [n2]]
+
+  let int_str_list3 (i1 : int_or_string) (i2 : int_list_or_string_list list) : int_list_or_string_list list=
+  match i1, i2 with
+  | String n1, StringList n2::_-> [StringList (append [n1] n2)]
+  | Int n1, IntList n2::_ -> [IntList (append [n1] n2)]
+  | Int n1, StringList n2::_ -> [IntList [n1]; StringList n2]
+  | String n1, IntList n2::_ -> [StringList [n1]; IntList n2]
+
 let convert (l : int_or_string list) : int_list_or_string_list list =
-  assert false (* TODO *)
+  let rec build lst =
+    match lst with
+    | [] -> []
+    | a::[] -> (match a with
+      | Int a1 -> [IntList[a1]]
+      | String a1 -> [StringList[a1]])
+    | e1::e2::[] -> int_str_list2 e1 e2
+    | a::b::c::[] -> int_str_list3 c (int_str_list2 a b)
+    | a::b::c::t -> append (int_str_list2 a b) (build (c::t))
+  in build l
+
+let test_in = [Int 2; Int 3; Int 4] (*String "a"; String "b"; Int 4; String "c"]*)
+let test_out = [IntList [2;3]; StringList ["a";"b"]; IntList [4]; StringList ["c"]]
+let _ = assert (convert test_in = test_out)
