@@ -51,7 +51,6 @@ let reduce (l : temp list) : temp list =
     | h::t,_ -> h::cool t
   in cool_loop l (List.length l)
 
-
 let _ = assert (reduce [Hot 0;Icy 0] = [])
 let _ = assert (reduce [Hot 0;Icy 1;Hot 1;Icy 0] = [])
 let _ = assert (reduce [Hot 0;Hot 1;Icy 2;Hot 2;Hot 0;Icy 1] = [Hot 0;Hot 1;Hot 0;Icy 1])

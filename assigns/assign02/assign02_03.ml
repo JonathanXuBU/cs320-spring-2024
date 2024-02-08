@@ -72,7 +72,19 @@ let rec opoststale (new_posts : post list) (stale:int) : post list =
   else opoststale t stale
 
 let update_recent (u : user) (time : int) (stale : int) : user =
-  assert false
+  {
+  username = u.username ;
+  email = u.email ;
+  time_joined = u.time_joined ;
+  is_paid_user = u.is_paid_user ;
+  balance= u.balance ;
+  next_payment_time = u.next_payment_time;
+  is_paused = u.is_paused;
+  num_followers = u.num_followers ;
+  num_likes  = u.num_likes ;
+  old_posts = npoststale u.recent_posts stale;
+  recent_posts = opoststale u.recent_posts stale;
+}
 
 let p t = {title="";content="";timestamp=t}
 let mk op rp = {
@@ -88,3 +100,5 @@ let mk op rp = {
   old_posts = op;
   recent_posts = rp;
 }
+
+let _ = assert (update_recent (mk [] [p 30;p 20;p 10;p 0]) 50 30 = mk [p 20;p 10;p 0] [p 30])
