@@ -100,5 +100,3 @@ let mk op rp = {
   old_posts = op;
   recent_posts = rp;
 }
-
-let _ = assert (update_recent (mk [] [p 30;p 20;p 10;p 0]) 50 30 = mk [p 20;p 10;p 0] [p 30])

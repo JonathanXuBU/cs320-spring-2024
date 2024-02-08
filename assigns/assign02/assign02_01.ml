@@ -27,7 +27,7 @@ let rec append lst1 lst2 =
   | [] -> lst2
   | h :: t -> h :: append t lst2
 
-
+(*
 let rec int_append (lst: int_or_string list) =
   match lst with
   | [] -> []
@@ -45,14 +45,7 @@ let rec str_append (lst: int_or_string list) =
     |String h -> append [String h] (str_append t)
     |Int h -> []
   )
-
-
-
-
-
-let test_in = [Int 1; Int 2; String "c"]
-
-(*
+*)
 let int_str_list2 (i1 : int_or_string) (i2 : int_or_string) : int_list_or_string_list list=
   match i1, i2 with
   | String n1, String n2 -> [StringList [n1; n2]]
@@ -85,9 +78,4 @@ let convert (l : int_or_string list) : int_list_or_string_list list =
     | a::b::c::[] -> int_str_list3 a (int_str_list2 b c)
     | a::b::c::t -> int_str_list4 (int_str_list2 a b) (build (c::t))
   in build l
-
-*)
-
-let convert =
-  assert false
 
