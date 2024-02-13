@@ -42,16 +42,35 @@ type 'a forklist
   | Cons of 'a * 'a forklist
   | Fork of 'a * 'a forklist * 'a forklist
 
+let rec tailed (flist: int forklist) : int forklist =
+  match flist with
+  | Nil -> Nil
+  | Cons (a, Nil) -> Cons (a, Nil)
+  | Cons (a ,a1) -> (
+    match a1 with
+    | Nil -> Cons (a, Nil)
+    | Cons(b, b1) -> (Cons (a, tailed a1))
+    | Fork(b, b1, b2) -> Fork(b, Cons(a, tailed b1), tailed b2)
+  )
+  | Fork (a, a1, a2) -> (Fork (a, (tailed a1), (tailed a2)))
+
 let delay_cons (f : int forklist) : int forklist =
-  let rec tailed (flist: int forklist) : int forklist =
-    match flist with
+  tailed (tailed (tailed (tailed (tailed (tailed (tailed (tailed (tailed (f)))))))))
+(*
+  let rec check (fist : int forklist) : int forklist =
+    match fist with
     | Nil -> Nil
-    | Cons (a, Nil) -> Cons (a, Nil)
-    | Cons (a ,a1) -> (
+    | Cons (a, a1) -> (
       match a1 with
-      | Nil -> Cons (a, Nil)
-      | Cons(b, b1) -> Cons (a, tailed b1)
-      | Fork(b, b1, b2) -> Fork(b, Cons(a, tailed b1), tailed b2)
+      | Nil -> Cons (a, a1)
+      | Cons (b, b1) -> Cons (a, check a1)
+      | Fork (b, b1, b2) -> check (tailed fist)
     )
-    | Fork (a, a1, a2) -> Fork (a, (tailed a1), (tailed a2))
-    in tailed f
+    | Fork (a, a1, a2) -> Fork (a, check a1, check a2)
+  in check f
+*)
+
+
+let f2 = Cons(10, Cons(15, Fork(50, Cons(25, Nil), Cons(55, Nil))));;
+let g2 = Fork(50, Cons(10, Cons(15, Cons(25, Nil))), Cons(55, Nil));;
+let _ = assert(delay_cons f2 = g2);;
