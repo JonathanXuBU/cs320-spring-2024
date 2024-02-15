@@ -227,7 +227,7 @@ let multiply (m : float matrix) (n : float matrix) : (float matrix, error) resul
   if m.num_cols != n.num_rows then Error MulMismatch
   else
   let l = transpose (n)
-  in Ok ({num_rows = n.num_rows; num_cols = m.num_rows; rows = transpost (mxMult m.rows l.rows)})
+  in Ok ({num_rows = m.num_rows; num_cols = n.num_cols; rows = transpost (mxMult m.rows l.rows)})
 
 
 
