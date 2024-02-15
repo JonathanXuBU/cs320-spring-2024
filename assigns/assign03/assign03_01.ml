@@ -20,6 +20,7 @@
 
 *)
 
+(*
 let rec append (l1: 'a list) (l2 : 'a list) : 'a list=
   match l1 with
   | [] -> l2
@@ -38,6 +39,15 @@ and insert elem lst =
      comparing them and putting into place depending on whether it is greater than or less than the next element*)
 (*Code referenced from a post on Stack Exchange, Comments added to demonstrate my understanding
    and deconstruction*)
+  
+*)
+
+let rec mergesort l1 l2 =
+  match l1, l2 with
+  | [], _ -> l2
+  | _, [] -> l1
+  | h :: t, hh :: tt ->
+      if h < hh then h :: mergesort t l2 else hh :: mergesort l1 tt
 
 type 'a concatlist
   = Nil
@@ -49,6 +59,6 @@ let sort (l : 'a concatlist) : 'a list =
     match e with
     | Nil -> []
     | Single a -> [a]
-    | Concat (a,b) -> sortlist (append (go a) (go b))
+    | Concat (a,b) -> mergesort (go a) (go b)
   in go l
 
