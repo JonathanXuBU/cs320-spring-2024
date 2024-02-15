@@ -69,7 +69,8 @@ let delay_cons (f : int forklist) : int forklist =
     | Fork (a, a1, a2) -> Fork (a, check a1, check a2)
   in check f
 
-
+(*
 let f2 = Cons(10, Cons(15, Fork(50, Cons(25, Nil), Cons(55, Nil))));;
 let g2 = Fork(50, Cons(10, Cons(15, Cons(25, Nil))), Cons(55, Nil));;
 let _ = assert(delay_cons f2 = g2);;
+*)

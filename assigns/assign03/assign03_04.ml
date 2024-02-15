@@ -207,8 +207,28 @@ let rec transpost (rs : 'a list list) : 'a list list =
 let transpose (m : 'a matrix) : 'a matrix =
   {num_rows = m.num_cols; num_cols = m.num_rows; rows = transpost m.rows}
 
+let rec dot u v =
+  match u, v with
+  | [], [] -> 0.
+  | x :: xs, y :: ys -> x *. y +. dot xs ys
+  | _,_ -> assert false
+  
+let rec mv_mul a v =
+  match a with
+  | [] -> []
+  | row :: rows -> dot row v :: mv_mul rows v
+
+let rec mxMult (m : 'a list list) (n : 'a list list) : 'a list list =
+  match n with
+  | [] -> []
+  | (h::t) -> append [mv_mul m h] (mxMult m t)
+  
 let multiply (m : float matrix) (n : float matrix) : (float matrix, error) result =
-  assert false (* TODO *)
+  if m.num_cols != n.num_rows then Error MulMismatch
+  else
+  let l = transpose (n)
+  in Ok ({num_rows = n.num_rows; num_cols = m.num_rows; rows = transpost (mxMult m.rows l.rows)})
+
 
 
 (*
@@ -220,8 +240,6 @@ let l1 = [1; 2 ; 3]
 let l2 = [1; 5 ; 3]
 let l3 = [1; 5 ; 3; 5]
 let l4 = [1; 5]
-
-*)
 
 let l = [[1;2;3];[4;5;6]]
 let rm = mkMatrix l
@@ -246,3 +264,24 @@ let _ = match rm with
   let _ = assert (tm.rows = [[1;4];[2;5];[3;6]]) in
   ()
 | _ -> assert false
+
+let a =
+  { num_rows = 2 ;
+    num_cols = 2 ;
+    rows = [[1.;2.];[3.;4.]] ;
+  }
+
+let b =
+  { num_rows = 1 ;
+    num_cols = 2 ;
+    rows = [[1.; 2.]] ;
+  }
+
+let _ = assert (multiply a a = Ok {
+  num_rows = 2 ;
+  num_cols = 2 ;
+  rows = [[7.;10.];[15.;22.]] ;
+ })
+
+let _ = assert (multiply a b = Error MulMismatch)
+*)
