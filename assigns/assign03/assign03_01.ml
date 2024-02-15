@@ -29,10 +29,15 @@ let rec sortlist lst =
   match lst with
     [] -> []
   | head :: tail -> insert head (sortlist tail)
-and insert elt lst =
+  (*iterates through the list for each element*)
+and insert elem lst =
   match lst with
-    [] -> [elt]
-  | head :: tail -> if elt <= head then elt :: lst else head :: insert elt tail;;
+    [] -> [elem]
+  | head :: tail -> if elem <= head then elem :: lst else head :: insert elem tail;;
+  (*takes that element and compares it to the recursive call of sort on the rest of the elements,
+     comparing them and putting into place depending on whether it is greater than or less than the next element*)
+(*Code referenced from a post on Stack Exchange, Comments added to demonstrate my understanding
+   and deconstruction*)
 
 type 'a concatlist
   = Nil

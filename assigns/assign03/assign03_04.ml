@@ -115,11 +115,134 @@ type 'a matrix = {
   rows : ('a list) list ;
 }
 
+let rec append (l1: 'a list) (l2 : 'a list) : 'a list=
+  match l1 with
+  | [] -> l2
+  | h :: t -> h :: append t l2
+
+let rec checkEven (r1: 'a list) (r2: 'a list): bool =
+  match r1, r2 with
+  | [], [] -> true
+  | [], _ -> false
+  | _, [] -> false
+  | h1::t1, h2::t2 -> checkEven t1 t2
+
+let rec checkRows (rs: 'a list list): bool =
+  match rs with
+  | [] -> true
+  | (h::[]) -> true
+  | (h::t) ->
+    (match t with
+    | (hh::tt) -> if (checkEven h hh) then
+      checkRows(t) else false
+    | _ -> assert false
+    )
+
+let rec isEmptyCols (rs: 'a list list): bool =
+  match rs with
+  | [] -> true
+  | (h::t) -> (
+      match h with
+      | [] -> isEmptyCols t
+      | _ -> false
+      )
+
+let dimension (m : 'a list list) : (int * int) =
+  let no_rows = List.length m
+  in let no_cols =
+    match m with
+    | [] -> 0
+    | r :: t -> List.length r
+  in (no_rows,no_cols)
+(*taken from lecture*)
+
+let createMatrix (rs: 'a list list) : 'a matrix =
+  match (dimension rs) with
+  | (row_no, col_no) -> {num_rows = row_no; num_cols = col_no; rows = rs}
+
+
 let mkMatrix (rs : 'a list list) : ('a matrix, error) result =
-  assert false (* TODO *)
+  match rs with
+  | [] -> Error ZeroRows
+  | _ -> (if (isEmptyCols rs) then
+    Error ZeroCols else
+      (if checkRows rs then
+      (Ok (createMatrix rs)) else
+      Error UnevenRows
+  )
+)
+
+let rec first_column : 'a list list -> 'a list list option = function
+  | [] -> None
+  | h :: t -> match h with
+    | [] -> None 
+    | hh :: tt -> match first_column t with
+      | None -> Some [[hh]]
+      | Some ttt -> Some ([hh] :: ttt)
+
+let rec rest_columns : 'a list list -> 'a list list option = function
+  | [] -> None
+  | h :: t -> match h with
+    | [] -> None 
+    | hh :: tt -> match rest_columns t with
+      | None -> Some [tt]
+      | Some ttt -> Some (tt :: ttt)
+
+let rec collapse (lst : 'a list list) : 'a list =
+  match lst with
+  | [] -> []
+  | h::t -> append h (collapse (t))
+
+let rec transpost (rs : 'a list list) : 'a list list =
+  match rs with
+  | [] -> []
+  | l -> (if isEmptyCols rs then [] else
+     (
+    match first_column rs, rest_columns rs with
+    | Some h, Some t -> append [collapse h] (transpost t)
+    | _,_ -> assert false
+  )
+  )
 
 let transpose (m : 'a matrix) : 'a matrix =
-  assert false (* TODO *)
+  {num_rows = m.num_cols; num_cols = m.num_rows; rows = transpost m.rows}
 
 let multiply (m : float matrix) (n : float matrix) : (float matrix, error) result =
   assert false (* TODO *)
+
+
+(*
+let l = [[1;2;3];[4;5;6];[1;2;3];[4;5;6];[1;2;3];[4;5;6]]
+let lst2 = [[1;2;3];[4;6]]
+let lst3 = [[];[];[];[]]
+let lst 4 = []
+let l1 = [1; 2 ; 3]
+let l2 = [1; 5 ; 3]
+let l3 = [1; 5 ; 3; 5]
+let l4 = [1; 5]
+
+*)
+
+let l = [[1;2;3];[4;5;6]]
+let rm = mkMatrix l
+let _ = match rm with
+  | Ok m ->
+    let _ = assert (m.num_rows = 2) in
+    let _ = assert (m.num_cols = 3) in
+    ()
+  | _ -> assert false
+
+let r = [[1;2;3;4];[1;2;3]]
+let rm' = mkMatrix r
+let _ = match rm' with
+  | Ok _ -> assert false
+  | Error e -> assert (e = UnevenRows)
+
+let _ = match rm with
+| Ok m ->
+  let tm = transpose m in
+  let _ = assert (tm.num_rows = 3) in
+  let _ = assert (tm.num_cols = 2) in
+  let _ = assert (tm.rows = [[1;4];[2;5];[3;6]]) in
+  ()
+| _ -> assert false
