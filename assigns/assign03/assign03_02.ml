@@ -55,20 +55,19 @@ let rec tailed (flist: int forklist) : int forklist =
   | Fork (a, a1, a2) -> (Fork (a, (tailed a1), (tailed a2)))
 
 let delay_cons (f : int forklist) : int forklist =
-  tailed (tailed (tailed (tailed (tailed (tailed (tailed (tailed (tailed (f)))))))))
-(*
+  (*tailed (tailed (tailed (tailed (tailed (tailed (tailed (tailed (tailed (f)))))))))
+  *)
   let rec check (fist : int forklist) : int forklist =
     match fist with
     | Nil -> Nil
     | Cons (a, a1) -> (
-      match a1 with
+      match check a1 with
       | Nil -> Cons (a, a1)
       | Cons (b, b1) -> Cons (a, check a1)
       | Fork (b, b1, b2) -> check (tailed fist)
     )
     | Fork (a, a1, a2) -> Fork (a, check a1, check a2)
   in check f
-*)
 
 
 let f2 = Cons(10, Cons(15, Fork(50, Cons(25, Nil), Cons(55, Nil))));;
