@@ -91,7 +91,7 @@ let rec consecutive_helper (len : int) (l1: 'a list) (l2: 'a list) : 'a list opt
 
 let consecutives (len : int) (l : 'a list) : 'a list list =
   if (len >= List.length l) then [l] else
-  if (len <= 1) then [[]] else
+  if (len < 1) then [[]] else
   (
   let rec consecutive_calls (len : int) (l2 : 'a list) : 'a list list =
   match l2 with
@@ -111,7 +111,7 @@ let list_conv
   List.map (f l) (consecutives (List.length l) r)
 
 let poly_mult_helper (u : int list) (v : int list) : int =
-  let rec poly_mult_helper_helper (u) (v) : int =
+  let rec poly_mult_helper_helper (u: int list) (v: int list) : int =
     match u, v with
     | [], _ -> 0
     | _, [] -> 0
@@ -119,12 +119,9 @@ let poly_mult_helper (u : int list) (v : int list) : int =
   in poly_mult_helper_helper (List.rev u) v
 
 let poly_mult (p : int list) (q : int list) : int list =
-  if p = [] then [] else
-  if q = [] then [] else
   let padding = List.init (List.length p - 1) (fun _ -> 0) in
   let padded_q = padding @ q @ padding in
   list_conv poly_mult_helper p padded_q
-
 let _ = assert (map2 (fun x y -> x + y) [1;2] [3;4;5] = [4;6])
 
 let _ = assert (consecutives 2 [1;2;3;4;5] = [[1;2];[2;3];[3;4];[4;5]])
