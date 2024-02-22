@@ -77,11 +77,6 @@
    let _ = assert (poly_mult [4;5] [1;2;3] = [4;13;22;15])
    (* ( 1 + 2x + 3x^2 ) ( 4 + 5x ) = 4 + 13x + 22x^2 + 15x^3 *)
 *)
-let rec truncate (lst: 'a list) : 'b list =
-  match lst with
-  | [] -> []
-  | h::t -> h :: truncate t
-
 
 let rec map2 (f : 'a -> 'b -> 'c) (l : 'a list) (r : 'b list) : 'c list =
   match l, r with
