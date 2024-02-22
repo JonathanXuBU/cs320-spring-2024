@@ -29,6 +29,7 @@
 *)
 
 let apply_cycle (funcs : ('a -> 'a) list) (n : int) (x : 'a) : 'a =
+  if funcs = [] then x else
   let rec rec_func (funclst : ('a -> 'a) list) (n : int) (s : int) (x : 'a): 'a =
     if s >= n then x else
       rec_func funclst n (s+1) (x |> List.nth funclst (s mod List.length funclst))

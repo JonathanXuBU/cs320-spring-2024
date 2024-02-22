@@ -113,20 +113,23 @@ let list_conv
 
 let poly_mult_helper (u : int list) (v : int list) : int =
   let rec poly_mult_helper_helper (u) (v) : int =
-  match u, v with
-  | [], _ -> 0
-  | _, [] -> 0
-  | h::t, hh::tt -> (h * hh) + (poly_mult_helper_helper t tt)
+    match u, v with
+    | [], _ -> 0
+    | _, [] -> 0
+    | h::t, hh::tt -> (h * hh) + (poly_mult_helper_helper t tt)
   in poly_mult_helper_helper (List.rev u) v
 
-let poly_mult (p : int list) (q : int list) (*: int list *)=
+let poly_mult (p : int list) (q : int list) : int list =
   let padding = List.init (List.length p - 1) (fun _ -> 0) in
   let padded_q = padding @ q @ padding in
   list_conv poly_mult_helper p padded_q
 
-let f x y = x + y
-let l1 = [4;5;3;6]
-let l2 = [7;8;9;10;12;12;13]
-let l3 = [1;2;3;4;5]
-let p = [1;2;3] 
-let q = [4;5]
+let _ = assert (map2 (fun x y -> x + y) [1;2] [3;4;5] = [4;6;5])
+
+let _ = assert (consecutives 2 [1;2;3;4;5] = [[1;2];[2;3];[3;4];[4;5]])
+let _ = assert (consecutives 1 [] = [[]])
+let _ = assert (consecutives 10 [1;2;3;4;5] = [[1;2;3;4;5]])
+
+let _ = assert (poly_mult [1;2;3] [4;5] = [4;13;22;15])
+let _ = assert (poly_mult [4;5] [1;2;3] = [4;13;22;15])
+(* ( 1 + 2x + 3x^2 ) ( 4 + 5x ) = 4 + 13x + 22x^2 + 15x^3 *)
