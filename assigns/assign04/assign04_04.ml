@@ -77,12 +77,16 @@
    let _ = assert (poly_mult [4;5] [1;2;3] = [4;13;22;15])
    (* ( 1 + 2x + 3x^2 ) ( 4 + 5x ) = 4 + 13x + 22x^2 + 15x^3 *)
 *)
+let rec truncate (lst: 'a list) : 'b list =
+  match lst with
+  | [] -> []
+  | h::t -> h :: truncate t
+
 
 let rec map2 (f : 'a -> 'b -> 'c) (l : 'a list) (r : 'b list) : 'c list =
   match l, r with
-  | [], _ -> r
-  | _, [] -> l
   | (h::t), (hh::tt) -> [(f h hh)] @ map2 f t tt
+  | _, _ -> []
 
 let rec consecutive_helper (len : int) (l1: 'a list) (l2: 'a list) : 'a list option=
   if (len <= 0) then Some l2 else
@@ -124,7 +128,7 @@ let poly_mult (p : int list) (q : int list) : int list =
   let padded_q = padding @ q @ padding in
   list_conv poly_mult_helper p padded_q
 
-let _ = assert (map2 (fun x y -> x + y) [1;2] [3;4;5] = [4;6;5])
+let _ = assert (map2 (fun x y -> x + y) [1;2] [3;4;5] = [4;6])
 
 let _ = assert (consecutives 2 [1;2;3;4;5] = [[1;2];[2;3];[3;4];[4;5]])
 let _ = assert (consecutives 1 [] = [[]])
