@@ -124,6 +124,8 @@ let poly_mult_helper (u : int list) (v : int list) : int =
   in poly_mult_helper_helper (List.rev u) v
 
 let poly_mult (p : int list) (q : int list) : int list =
+  if p = [] then [] else
+  if q = [] then [] else
   let padding = List.init (List.length p - 1) (fun _ -> 0) in
   let padded_q = padding @ q @ padding in
   list_conv poly_mult_helper p padded_q
