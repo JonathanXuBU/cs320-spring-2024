@@ -1,0 +1,20 @@
+def ISNEG
+    0 swap <
+;
+
+def FIB
+    dup 2 swap -|> K
+    0 |> I
+    1 1
+    #FIBHELPER
+;
+
+def FIBHELPER
+    K I < ?
+        I 1 + |> I
+        dup |> P + P swap
+        #FIBHELPER
+    ;
+;
+
+5 #FIB .

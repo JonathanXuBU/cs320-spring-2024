@@ -1,0 +1,9 @@
+def SQDIST
+    |> X
+    |> Y
+    X dup *
+    Y dup *
+    +
+;
+
+8 4 #SQDIST .
